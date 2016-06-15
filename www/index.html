@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title></title>
+
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+
+    <!-- your app's js -->
+    <script src="js/app.js"></script>
+	
+	<script src="http://maps.google.com/maps/api/js?key=AIzaSyB9XsHDR985Pvtzztf4Sg95H1b1KYoeN9E&sensor=true"></script>
+	
+  </head>
+  <body ng-app="MainActivity" ng-controller="main_activity">
+  
+	<ion-header-bar class="bar-dark">
+		<h1 class="title">Tester 2</h1>
+	</ion-header-bar>
+	
+	<ion-content>
+		<center>
+		<div class="row"><div class="col"><button class="button button-large" ng-click="showJson()">GET from server</button></div></div>
+		<div class="row"><div class="col"><button class="button button-large" ng-click="showJsonPost()">POST to server</button></div></div>
+		<div class="row"><div class="col"><button class="button button-large" ng-click="showGMAP()">Google Maps</button></div></div>
+		<div class="row"><div class="col"><button class="button button-large" ng-click="">Leaflet Maps</button></div></div>
+		</center>
+		
+	<script id="jsonModal.html" type="text/ng-template">
+
+	<div class="modal">
+
+		<!-- Modal header bar -->
+		<ion-header-bar class="bar-secondary">
+			<h1 class="title">JSON modal</h1>
+		</ion-header-bar>
+
+    <!-- Modal content area -->
+    <ion-content>
+
+		<center>
+			<p>{{result}}</p><br>
+			<p>Time elapsed: {{time}}</p>
+		</center>
+    </ion-content>
+
+  </div>
+  </script>
+  
+  <script id="jsonModalPost.html" type="text/ng-template">
+
+	<div class="modal">
+
+		<!-- Modal header bar -->
+		<ion-header-bar class="bar-secondary">
+			<h1 class="title">JSON POST modal</h1>
+		</ion-header-bar>
+
+    <!-- Modal content area -->
+    <ion-content>
+
+		<center>
+			<form ng-submit="POSTJson()">
+                    <label class="item item-input item-stacked-label">
+                        <span class="input-label">Username</span>
+                        <input type="text" name="username" placeholder="enter username" ng-model="formData.username">
+                    </label>
+					
+					<label class="item item-input item-stacked-label">
+                        <span class="input-label">Password</span>
+                        <input type="text" name="pwd" placeholder="enter password" ng-model="formData.pwd">
+                    </label>
+ 
+                    <input class="button button-block button-positive" type="submit" name="submit" value="Submit to server">                    
+                </form>
+				<p>{{POSTresult}}</p><br>
+				<p>Time elapsed: {{POSTtime}}</p>
+		</center>
+    </ion-content>
+
+  </div>
+  </script>
+  
+  <script id="GMAPModal.html" type="text/ng-template">
+
+	<div class="modal">
+
+		<!-- Modal header bar -->
+		<ion-header-bar class="bar-secondary">
+			<h1 class="title">Google Maps</h1>
+		</ion-header-bar>
+
+    <!-- Modal content area -->
+    <ion-content>
+		<div id="map" style="width:100%; height:100%" data-tap-disabled="true"></div>
+    </ion-content>
+
+  </div>
+  </script>
+  
+	</ion-content>
+  </body>
+</html>
