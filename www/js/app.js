@@ -1,10 +1,61 @@
 //includes all of the Ionic code which will process the tags
 
-var app = angular.module('MainActivity', ['ionic']);
+var app = angular.module('MainActivity', ['ionic','ngRoute']);
+
+ // configure our routes
+    app.config(function($routeProvider) {
+        $routeProvider
+
+            // route for the home page
+            .when('/', {
+                templateUrl : 'main_menu.html',
+                controller  : 'main_activity'
+            })
+
+            // route for the visual page
+            .when('/visual', {
+                templateUrl : 'visual.html',
+                controller  : 'visualController'
+            });
+    });
 
 
+	//this service is needed to connect the visualController with the main controller
+	app.service('timeService', function() {
+		var visual_start="";
+		var get_visual_start = function(){return visual_start;};
+		var set_visual_start = function(start){visual_start=start;};
+		
+		return{
+			get_visual_start : get_visual_start,
+			set_visual_start : set_visual_start
+		};
+	});
+	
+	app.controller('visualController', function($scope, $http, timeService) {
+        
+		$scope.timer = function(taskType, time){
+									var obj = {task : taskType, execution : time, platform : 'HYBRID'};
+									$http.post("http://83.212.86.247/thesis/test.php", obj)
+									.then(function(response){}
+									,function(response){});
+								 };
+								 
+		$scope.goHome = function(){
+									location.href('#/');
+								 };
+								 
+		// create a message to display in our view
+		var time_scrn_chng = new Date().getTime() - timeService.get_visual_start();
+        console.log("Visual here!!!! " + time_scrn_chng);
+		
+		//send the screen change time to the database
+		$scope.timer("SCR_CHNG", time_scrn_chng);						 
+		
+    });
 
-app.controller('main_activity', function($scope, $ionicModal, $http) {
+	
+app.controller('main_activity', function($scope, $ionicModal, $http, timeService) {
 
 	/*------------JSON GET MODAL----------------------------------------*/
 
@@ -40,14 +91,6 @@ app.controller('main_activity', function($scope, $ionicModal, $http) {
     animation: 'slide-in-up'
   });
   
-  /*------------SCREEN CHANGE MODAL----------------------------------------*/
-	$ionicModal.fromTemplateUrl('VisualModal.html', function(modal) {
-    $scope.VisualModal = modal;
-  }, {
-    scope: $scope,
-    animation: 'slide-in-up'
-  });
-  
   $scope.details="";
   $scope.result="";
   $scope.time="";
@@ -61,6 +104,8 @@ app.controller('main_activity', function($scope, $ionicModal, $http) {
   $scope.noOfshops="";
   
   $scope.map_init_time="";
+  
+  $scope.visual_start="";
   
   
 
@@ -109,19 +154,11 @@ app.controller('main_activity', function($scope, $ionicModal, $http) {
 									$scope.LeafletModal.hide();
 								 };
 	$scope.showVisual = function(){
-									var start = new Date().getTime();
-									$scope.VisualModal.show();
-									var time = new Date().getTime() - start;
-									
-									var obj = {task : "SCR_CHG", execution : time};
-									
-									$http.post("http://83.212.86.247/thesis/test.php", obj)
-									.then(function(response){}
-									,function(response){});
+									timeService.set_visual_start(new Date().getTime());
 								 };
-	$scope.hideVisual = function(){
+	/*$scope.hideVisual = function(){
 									$scope.VisualModal.hide();
-								 };
+								 };*/
 	$scope.GETJson = function(){
 									var start = new Date().getTime();
 									$http.get("http://83.212.86.247/thesis/test1.php")
