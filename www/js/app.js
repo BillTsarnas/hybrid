@@ -41,9 +41,9 @@ var app = angular.module('MainActivity', ['ionic','ngRoute']);
 									,function(response){});
 								 };
 								 
-		$scope.goHome = function(){
+		/*$scope.goHome = function(){
 									location.href('#/');
-								 };
+								 };*/
 								 
 		// create a message to display in our view
 		var time_scrn_chng = new Date().getTime() - timeService.get_visual_start();
