@@ -33,6 +33,16 @@ var app = angular.module('MainActivity', ['ionic','ngRoute']);
 	});
 	
 	app.controller('visualController', function($scope, $http, timeService) {
+		
+		$scope.range = function(min, max){
+			
+			var iter = [];
+			for (var i = min; i <= max; i += 1) {
+				iter.push(i);
+			}
+			return iter;
+			
+			};
         
 		$scope.timer = function(taskType, time){
 									var obj = {task : taskType, execution : time, platform : 'HYBRID'};
@@ -41,16 +51,14 @@ var app = angular.module('MainActivity', ['ionic','ngRoute']);
 									,function(response){});
 								 };
 								 
-		/*$scope.goHome = function(){
-									location.href('#/');
-								 };*/
-								 
-		// create a message to display in our view
+		
+		
 		var time_scrn_chng = new Date().getTime() - timeService.get_visual_start();
         console.log("Visual here!!!! " + time_scrn_chng);
 		
 		//send the screen change time to the database
-		$scope.timer("SCR_CHNG", time_scrn_chng);						 
+		$scope.timer("SCR_CHNG", time_scrn_chng);		
+		//$templateCache.remove('/visual');
 		
     });
 
