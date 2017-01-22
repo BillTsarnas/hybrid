@@ -34,6 +34,16 @@ var app = angular.module('MainActivity', ['ionic','ngRoute']);
 	
 	app.controller('visualController', function($scope, $http, timeService) {
 		
+		//when the document is ready (layout has been applied)
+		angular.element(document).ready(function () {
+			console.log("doc ready event!!!! " + timeService.get_visual_start());
+			
+			var time_scrn_chng = new Date().getTime() - timeService.get_visual_start();
+			console.log("Visual here!!!! " + time_scrn_chng);
+			
+			$scope.timer("SCR_CHNG", time_scrn_chng);
+		});
+		
 		$scope.range = function(min, max){
 			
 			var iter = [];
@@ -52,13 +62,6 @@ var app = angular.module('MainActivity', ['ionic','ngRoute']);
 								 };
 								 
 		
-		
-		var time_scrn_chng = new Date().getTime() - timeService.get_visual_start();
-        console.log("Visual here!!!! " + time_scrn_chng);
-		
-		//send the screen change time to the database
-		$scope.timer("SCR_CHNG", time_scrn_chng);		
-		//$templateCache.remove('/visual');
 		
     });
 
