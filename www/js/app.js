@@ -1,5 +1,7 @@
 //includes all of the Ionic code which will process the tags
 
+
+
 var app = angular.module('MainActivity', ['ionic','ngRoute']);
 
  // configure our routes
@@ -32,7 +34,20 @@ var app = angular.module('MainActivity', ['ionic','ngRoute']);
 		};
 	});
 	
-	app.controller('visualController', function($scope, $http, timeService) {
+	app.controller('visualController', function($ionicPlatform, $location, $scope, $http, timeService) {
+		
+		
+		//back button functionality - doesnt kill the app anymore while Visual tab is active
+		var defaultBack = $ionicPlatform.registerBackButtonAction(function(){
+			$location.path("/");
+			$scope.$apply();
+			}, 101
+		);
+		
+		//when leaving the Visual Tab, back button default functionality is restored
+		$scope.$on('$destroy', function() {
+			defaultBack();
+		});
 		
 		//when the document is ready (layout has been applied)
 		angular.element(document).ready(function () {
@@ -74,7 +89,7 @@ app.controller('main_activity', function($scope, $ionicModal, $http, timeService
     $scope.jsonModal = modal;
   }, {
     scope: $scope,
-    animation: 'slide-in-up'
+    animation: 'none'
   });
   
 
@@ -83,7 +98,7 @@ app.controller('main_activity', function($scope, $ionicModal, $http, timeService
     $scope.jsonModalPost = modal;
   }, {
     scope: $scope,
-    animation: 'slide-in-up'
+    animation: 'none'
   });
   
   /*------------GOOGLE MAPS MODAL----------------------------------------*/
@@ -91,7 +106,7 @@ app.controller('main_activity', function($scope, $ionicModal, $http, timeService
     $scope.GMAPModal = modal;
   }, {
     scope: $scope,
-    animation: 'slide-in-up'
+    animation: 'none'
   });
   
   /*------------LEAFLET MAPS MODAL----------------------------------------*/
@@ -99,7 +114,7 @@ app.controller('main_activity', function($scope, $ionicModal, $http, timeService
     $scope.LeafletModal = modal;
   }, {
     scope: $scope,
-    animation: 'slide-in-up'
+    animation: 'none'
   });
   
   $scope.details="";
@@ -117,6 +132,8 @@ app.controller('main_activity', function($scope, $ionicModal, $http, timeService
   $scope.map_init_time="";
   
   $scope.visual_start="";
+  
+  $scope.leaf_map="";
   
   
 
@@ -264,28 +281,27 @@ app.controller('main_activity', function($scope, $ionicModal, $http, timeService
     };
 	
 	$scope.onGeoSuccessLeaflet = function(position, shops) {
-		var mymap = L.map('leaf_map').setView([position.coords.latitude, position.coords.longitude], 13);
 		
-		L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-			maxZoom: 18,
-			id: 'mapbox.streets',
-			accessToken: 'pk.eyJ1IjoiYmlsbHRzIiwiYSI6ImNpcmMweDE3eTAwNmVpa25udjgxNWNtc3MifQ.dQaFufbf1N_440j8yKVTPA'
-		}).addTo(mymap);
-		
-		//var marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(mymap);
+		if($scope.leaf_map == ""){
+			$scope.leaf_map = L.map('leaf_map').setView([position.coords.latitude, position.coords.longitude], 13);
 		
 		
+			L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+				attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+				maxZoom: 18,
+				id: 'mapbox.streets',
+				accessToken: 'pk.eyJ1IjoiYmlsbHRzIiwiYSI6ImNpcmMweDE3eTAwNmVpa25udjgxNWNtc3MifQ.dQaFufbf1N_440j8yKVTPA'
+			}).addTo($scope.leaf_map);
 		
-		//var marker = L.marker([json[0].lat, json[0].lon]).addTo(mymap);
+		
  
 			for(var i = 0; i < 100; i++){
 				
-				var marker = L.marker([shops[i].lat, shops[i].lon]).addTo(mymap);
+				var marker = L.marker([shops[i].lat, shops[i].lon]).addTo($scope.leaf_map);
 			
 			}
 			
-			//$scope.noOfshops = shops.length;
+		}
 			
         
     };
