@@ -1,13 +1,13 @@
+<ion-view title="visual">
 <ion-header-bar align-title="center" class="bar-dark">
-			
-			<a href="#/"><button class="button button-clear button-positive">Back</button></a>
-			<center><h1 class="title">Visual tab!!!</h1></center>
+	<h1 class="title">Visual tab!!!</h1>
 </ion-header-bar>
 
 <ion-content> 
 	<ion-list>
-      <ion-item ng-repeat="entry in range(1,100)">
+      <ion-item collection-repeat="entry in range(1,100)">
         Entry #{{entry}}
       </ion-item>
     </ion-list>
 </ion-content>
+</ion-view>
